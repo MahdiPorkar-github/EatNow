@@ -1,5 +1,6 @@
 package com.example.eatnow
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,13 +18,14 @@ class FoodAdapter(private val foods:ArrayList<Food>) : RecyclerView.Adapter<Food
 
             binding.rowTxtFoodName.text = food.name
             binding.rowTxtFoodCity.text = food.city
-            binding.rowTxtFoodDistance.text = food.distance
-            binding.rowTxtFoodPrice.text = food.price
+            binding.rowTxtFoodDistance.text = food.distance + " miles from you"
+            binding.rowTxtFoodPrice.text = "$" + food.price + " vip"
             binding.rowFoodRatingBar.rating = food.rating
             binding.rowFoodRatersCount.text = "( ${food.ratersCount} Ratings)"
-            Glide.with(itemView.context).load(food.imageUrl).transform(
-                RoundedCornersTransformation(16, 4)
-            ).into(binding.rowImgMain)
+
+            Glide.with(binding.root.context).load(food.imageUrl)
+                .transform(RoundedCornersTransformation(16, 4)).into(binding.rowImgMain)
+
         }
 
     }
