@@ -16,14 +16,14 @@ class FoodAdapter(private val foods:ArrayList<Food>) : RecyclerView.Adapter<Food
 
         fun bindData(food:Food) {
 
-            binding.rowTxtFoodName.text = food.name
-            binding.rowTxtFoodCity.text = food.city
-            binding.rowTxtFoodDistance.text = food.distance + " miles from you"
-            binding.rowTxtFoodPrice.text = "$" + food.price + " vip"
+            binding.rowTxtFoodName.text = food.txtSubject
+            binding.rowTxtFoodCity.text = food.txtCity
+            binding.rowTxtFoodDistance.text = food.txtDistance + " miles from you"
+            binding.rowTxtFoodPrice.text = "$" + food.txtPrice + " vip"
             binding.rowFoodRatingBar.rating = food.rating
             binding.rowFoodRatersCount.text = "( ${food.ratersCount} Ratings)"
 
-            Glide.with(binding.root.context).load(food.imageUrl)
+            Glide.with(binding.root.context).load(food.urlImage)
                 .transform(RoundedCornersTransformation(16, 4)).into(binding.rowImgMain)
 
         }
