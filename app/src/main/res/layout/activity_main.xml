@@ -6,5 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:text="EatNow!"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/edt_find_food"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/img_add"
+        app:layout_constraintBottom_toTopOf="@+id/edt_find_food"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:tint="?attr/colorOnPrimary"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_plus"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_add" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edt_find_food"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Find Food ..."
+        app:startIconDrawable="@drawable/ic_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_add">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_main"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_find_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
