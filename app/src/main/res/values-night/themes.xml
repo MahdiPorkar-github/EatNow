@@ -15,4 +15,12 @@
         <item name="fontFamily">@font/pt_sans</item>
 
     </style>
+
+
+    <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/white</item>
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="hintTextColor">@color/white</item>
+    </style>
+
 </resources>

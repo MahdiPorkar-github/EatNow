@@ -5,4 +5,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#FF5722</color>
     <color name="orange_dark">#C41C00</color>
+<!--    <color name="mtrl_textinput_default_box_stroke_color">"black"</color>-->
 </resources>
