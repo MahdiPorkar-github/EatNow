@@ -43,4 +43,10 @@ class FoodAdapter(private val foods:ArrayList<Food>) : RecyclerView.Adapter<Food
     override fun getItemCount() = foods.size
 
 
+
+     fun addFood(newFood: Food) {
+        foods.add(0,newFood)
+        notifyItemInserted(0)
+    }
+
 }
