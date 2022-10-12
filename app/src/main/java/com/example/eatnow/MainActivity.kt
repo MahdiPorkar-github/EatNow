@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eatnow.databinding.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
+
     lateinit var binding: ActivityMainBinding
     private lateinit var foodAdapter: FoodAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,13 +26,27 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         binding.recyclerMain.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         binding.imgAdd.setOnClickListener {
-            addItem()
+            showDialogue()
         }
-    }
+
+        binding.edtSearchFood.addTextChangedListener { text ->
+
+            if (text.toString().isNotEmpty()) {
+
+                val filteredList = FoodGenerator.getFoods().filter { food ->
+                    food.txtSubject.contains(text.toString())
+                }
+
+                foodAdapter.setData(filteredList as ArrayList<Food>)
+
+            } else {
+                foodAdapter.setData(FoodGenerator.getFoods())
+                // show all data
+            }
+
+        }
 
 
-    private fun addItem() {
-        showDialogue()
     }
 
     private fun showDialogue() {
