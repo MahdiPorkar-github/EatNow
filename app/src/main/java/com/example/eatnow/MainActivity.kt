@@ -6,20 +6,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.eatnow.databinding.ActivityMainBinding
-import com.example.eatnow.databinding.DialogueAddNewItemBinding
+import com.example.eatnow.databinding.*
 import java.util.*
-import kotlin.random.Random.Default.nextFloat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
     lateinit var binding: ActivityMainBinding
-    lateinit var foodAdapter: FoodAdapter
+    private lateinit var foodAdapter: FoodAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        foodAdapter = FoodAdapter(FoodGenerator.getFoods())
+        foodAdapter = FoodAdapter(FoodGenerator.getFoods(), this)
         binding.recyclerMain.adapter = foodAdapter
         binding.recyclerMain.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDialogue() {
         val dialogue = AlertDialog.Builder(this).create()
-        val dialogueBinding = DialogueAddNewItemBinding.inflate(layoutInflater)
+        val dialogueBinding = DialogAddNewItemBinding.inflate(layoutInflater)
         dialogue.setView(dialogueBinding.root)
         dialogue.setCancelable(true)
         dialogue.show()
@@ -67,5 +65,62 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onFoodClicked(food: Food, position: Int) {
+
+        val dialog = AlertDialog.Builder(this).create()
+        val dialogBinding = DialogUpdateItemBinding.inflate(layoutInflater)
+        dialog.setView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.show()
+
+        dialogBinding.dialogueEdtFoodName.setText(food.txtSubject)
+        dialogBinding.dialogueEdtFoodCity.setText(food.txtCity)
+        dialogBinding.dialogueEdtFoodDistance.setText(food.txtDistance)
+        dialogBinding.dialogueEdtFoodPrice.setText(food.txtPrice)
+
+        dialogBinding.dialogBtnUpdateCancel.setOnClickListener { dialog.dismiss() }
+        dialogBinding.dialogBtnUpdateSure.setOnClickListener {
+
+            val txtName = dialogBinding.dialogueEdtFoodName.text.toString()
+            val txtCity = dialogBinding.dialogueEdtFoodCity.text.toString()
+            val txtPrice = dialogBinding.dialogueEdtFoodPrice.text.toString()
+            val txtDistance = dialogBinding.dialogueEdtFoodDistance.text.toString()
+
+
+            if (txtName.isNotEmpty() && txtCity.isNotEmpty() && txtPrice.isNotEmpty() && txtDistance.isNotEmpty()) {
+                food.txtSubject = dialogBinding.dialogueEdtFoodName.text.toString()
+                food.txtPrice = dialogBinding.dialogueEdtFoodPrice.text.toString()
+                food.txtDistance = dialogBinding.dialogueEdtFoodDistance.text.toString()
+                food.txtCity = dialogBinding.dialogueEdtFoodCity.text.toString()
+                foodAdapter.updateFood(position)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+
+            }
+
+
+        }
+    }
+
+    override fun onFoodLongClicked(food: Food, position: Int) {
+
+        val dialog = AlertDialog.Builder(this).create()
+        val dialogBinding = DialogDeleteItemBinding.inflate(layoutInflater)
+        dialog.setView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.show()
+
+        dialogBinding.dialogBtnDeleteCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.dialogBtnDeleteSure.setOnClickListener {
+
+            foodAdapter.removeFood(food, position)
+            dialog.dismiss()
+        }
     }
 }

@@ -5,8 +5,12 @@
       <map>
         <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/drawable/bg_plus.xml" value="0.1235" />
         <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/drawable/ic_add.xml" value="0.1235" />
+        <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/drawable/ic_cancel.xml" value="0.1235" />
         <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/drawable/ic_search.xml" value="0.1235" />
         <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/layout/dialog_add_new_item.xml" value="0.21927083333333333" />
+        <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/layout/dialog_delete_item.xml" value="0.21822916666666667" />
+        <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/layout/dialog_update_new_item.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/layout/dialogue_add_new_item.xml" value="0.2" />
         <entry key="..\:/Users/Mahdi/AndroidStudioProjects/EatNow/app/src/main/res/layout/row_recycler_food.xml" value="0.21927083333333333" />
       </map>
