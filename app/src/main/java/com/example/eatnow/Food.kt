@@ -1,6 +1,9 @@
 package com.example.eatnow
 
-class Food(
+import androidx.room.Entity
+
+@Entity
+data class Food(
     var txtSubject: String,
     var txtPrice: String,
     var txtDistance: String,
