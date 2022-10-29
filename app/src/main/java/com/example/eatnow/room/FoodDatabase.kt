@@ -14,17 +14,15 @@ abstract class FoodDatabase : RoomDatabase() {
 
         private var database: FoodDatabase? = null
         fun getDatabase(context: Context): FoodDatabase {
-
-            var instance = database
-            if (instance == null) {
-                instance = Room.databaseBuilder(
+            if (database == null) {
+                database = Room.databaseBuilder(
                     context.applicationContext,
                     FoodDatabase::class.java,
                     "myDatabase.db"
                 ).build()
             }
 
-            return instance
+            return database!!
         }
     }
 
