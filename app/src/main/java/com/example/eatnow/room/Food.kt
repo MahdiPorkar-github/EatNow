@@ -1,9 +1,13 @@
-package com.example.eatnow
+package com.example.eatnow.room
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "food_table")
 data class Food(
+    @PrimaryKey(autoGenerate = true)
+    val id : Int? = null,
+
     var txtSubject: String,
     var txtPrice: String,
     var txtDistance: String,
