@@ -19,7 +19,7 @@ abstract class FoodDatabase : RoomDatabase() {
                     context.applicationContext,
                     FoodDatabase::class.java,
                     "myDatabase.db"
-                ).build()
+                ).allowMainThreadQueries().build()
             }
 
             return database!!

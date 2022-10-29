@@ -1,5 +1,6 @@
 package com.example.eatnow
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eatnow.databinding.*
 import com.example.eatnow.room.Food
+import com.example.eatnow.room.FoodDao
+import com.example.eatnow.room.FoodDatabase
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -16,15 +19,23 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var foodAdapter: FoodAdapter
+    private lateinit var foodDao: FoodDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        foodAdapter = FoodAdapter(FoodGenerator.getFoods(), this)
-        binding.recyclerMain.adapter = foodAdapter
-        binding.recyclerMain.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        foodDao = FoodDatabase.getDatabase(this).foodDao
+
+        val sharedPreferences = getSharedPreferences("eatNow",Context.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("firstRun",true)) {
+            firstRun()
+            sharedPreferences.edit().putBoolean("firstRun",false).apply()
+        }
+
+        showAllData()
+
 
         binding.imgAdd.setOnClickListener {
             showDialogue()
@@ -48,6 +59,19 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         }
 
 
+    }
+
+    private fun showAllData() {
+
+        val foodData = foodDao.getAllFoods()
+        foodAdapter = FoodAdapter(ArrayList(foodData), this)
+        binding.recyclerMain.adapter = foodAdapter
+        binding.recyclerMain.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+
+    }
+    private fun firstRun() {
+        foodDao.insertAllFoods(FoodGenerator.getFoods())
     }
 
     private fun showDialogue() {
@@ -74,7 +98,15 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
             if (txtName.isNotEmpty() && txtCity.isNotEmpty() && txtPrice.isNotEmpty() && txtDistance.isNotEmpty()) {
                 val newFood =
-                    Food(txtSubject = txtName, txtPrice =  txtPrice, txtDistance =  txtDistance, txtCity =  txtCity, urlImage =  urlPic, ratersCount = txtRatersCount,rating = rating)
+                    Food(
+                        txtSubject = txtName,
+                        txtPrice = txtPrice,
+                        txtDistance = txtDistance,
+                        txtCity = txtCity,
+                        urlImage = urlPic,
+                        ratersCount = txtRatersCount,
+                        rating = rating
+                    )
                 foodAdapter.addFood(newFood)
                 binding.recyclerMain.scrollToPosition(0)
                 dialogue.dismiss()
