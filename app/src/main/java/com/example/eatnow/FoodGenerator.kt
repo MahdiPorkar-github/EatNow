@@ -1,17 +1,19 @@
 package com.example.eatnow
 
+import com.example.eatnow.room.Food
+
 object FoodGenerator {
 
     fun getFoods(): ArrayList<Food> {
         return arrayListOf(
             Food(
-                "Hamburger",
-                "15",
-                "3",
-                "Isfahan, Iran",
-                "https://dunijet.ir/YaghootAndroidFiles/DuniFoodSimple/food1.jpg",
-                20,
-                4.5f
+                txtSubject = "Hamburger",
+                txtPrice = "15",
+                txtDistance = "3",
+                txtCity = "Isfahan, Iran",
+                urlImage = "https://dunijet.ir/YaghootAndroidFiles/DuniFoodSimple/food1.jpg",
+                ratersCount = 20,
+                rating = 4.5f
             ),
             Food(
                 "Grilled fish",
@@ -111,7 +113,8 @@ object FoodGenerator {
                 "https://dunijet.ir/YaghootAndroidFiles/DuniFoodSimple/food12.jpg",
                 35,
                 2.5f
-            ))
+            )
+        )
     }
 
 }

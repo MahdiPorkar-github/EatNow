@@ -1,16 +1,14 @@
 package com.example.eatnow
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eatnow.databinding.RowRecyclerFoodBinding
+import com.example.eatnow.room.Food
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import java.text.FieldPosition
 
-class FoodAdapter(private val foods: ArrayList<Food>,private val foodEvents: FoodEvents) :
+class FoodAdapter(private val foods: ArrayList<Food>, private val foodEvents: FoodEvents) :
     RecyclerView.Adapter<FoodAdapter.ViewHolder>() {
 
 
@@ -83,8 +81,8 @@ class FoodAdapter(private val foods: ArrayList<Food>,private val foodEvents: Foo
 
 
     interface FoodEvents {
-        fun onFoodClicked(food: Food,position: Int)
-        fun onFoodLongClicked(food: Food,position: Int)
+        fun onFoodClicked(food: Food, position: Int)
+        fun onFoodLongClicked(food: Food, position: Int)
     }
 
 }

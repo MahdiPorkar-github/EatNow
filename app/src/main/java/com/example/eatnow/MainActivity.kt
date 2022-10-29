@@ -8,6 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eatnow.databinding.*
+import com.example.eatnow.room.Food
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
             if (txtName.isNotEmpty() && txtCity.isNotEmpty() && txtPrice.isNotEmpty() && txtDistance.isNotEmpty()) {
                 val newFood =
-                    Food(txtName, txtPrice, txtDistance, txtCity, urlPic, txtRatersCount, rating)
+                    Food(txtSubject = txtName, txtPrice =  txtPrice, txtDistance =  txtDistance, txtCity =  txtCity, urlImage =  urlPic, ratersCount = txtRatersCount,rating = rating)
                 foodAdapter.addFood(newFood)
                 binding.recyclerMain.scrollToPosition(0)
                 dialogue.dismiss()
