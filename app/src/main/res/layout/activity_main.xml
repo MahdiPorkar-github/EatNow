@@ -32,6 +32,19 @@
         app:srcCompat="@drawable/ic_add"
         app:tint="?attr/colorOnPrimary" />
 
+    <ImageView
+        android:id="@+id/img_remove_all"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_plus"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/edt_find_food"
+        app:layout_constraintEnd_toStartOf="@id/img_add"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_clear_all"
+        app:tint="?attr/colorOnPrimary" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edt_find_food"
         style="@style/MyTextInputLayout"

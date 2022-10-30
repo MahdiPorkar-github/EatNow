@@ -15,6 +15,9 @@ import com.example.eatnow.room.FoodDatabase
 import java.util.*
 import kotlin.collections.ArrayList
 
+
+const val BASE_URL_IMAGE = "https://dunijet.ir/YaghootAndroidFiles/DuniFoodSimple/food"
+
 class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
     lateinit var binding: ActivityMainBinding
@@ -38,7 +41,11 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
 
         binding.imgAdd.setOnClickListener {
-            showDialogue()
+            addNewFood()
+        }
+
+        binding.imgRemoveAll.setOnClickListener {
+            removeAllData()
         }
 
         binding.edtSearchFood.addTextChangedListener { text ->
@@ -61,6 +68,11 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
     }
 
+    private fun removeAllData() {
+        foodDao.deleteAllFoods()
+        showAllData()
+    }
+
     private fun showAllData() {
 
         val foodData = foodDao.getAllFoods()
@@ -74,7 +86,8 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         foodDao.insertAllFoods(FoodGenerator.getFoods())
     }
 
-    private fun showDialogue() {
+    private fun addNewFood() {
+
         val dialogue = AlertDialog.Builder(this).create()
         val dialogueBinding = DialogAddNewItemBinding.inflate(layoutInflater)
         dialogue.setView(dialogueBinding.root)
@@ -82,8 +95,6 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         dialogue.show()
 
         dialogueBinding.dialogBtnDone.setOnClickListener {
-            // how should i create a new method for this???
-            // cause i want to obey solid rules
 
             val txtName = dialogueBinding.dialogueEdtFoodName.text.toString()
             val txtCity = dialogueBinding.dialogueEdtFoodCity.text.toString()
@@ -92,8 +103,9 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
             val txtRatersCount = (1..150).random()
             val rating = 0f + Random().nextFloat() * (5f) // generates a float in range of 1-5
 
-            val randomForUrl = (0..11).random()
-            val urlPic = FoodGenerator.getFoods()[randomForUrl].urlImage
+
+            val randomForUrl = (1..12).random()
+            val urlPic = "$BASE_URL_IMAGE$randomForUrl.jpg"
 
 
             if (txtName.isNotEmpty() && txtCity.isNotEmpty() && txtPrice.isNotEmpty() && txtDistance.isNotEmpty()) {
@@ -108,6 +120,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
                         rating = rating
                     )
                 foodAdapter.addFood(newFood)
+                foodDao.insertFood(newFood)
                 binding.recyclerMain.scrollToPosition(0)
                 dialogue.dismiss()
 
@@ -170,8 +183,9 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
         dialogBinding.dialogBtnDeleteSure.setOnClickListener {
 
-            foodAdapter.removeFood(food, position)
             dialog.dismiss()
+            foodAdapter.removeFood(food, position)
+            foodDao.deleteFood(food)
         }
     }
 }
