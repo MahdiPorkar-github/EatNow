@@ -68,7 +68,8 @@ class FoodAdapter(private val foods: ArrayList<Food>, private val foodEvents: Fo
     }
 
 
-    fun updateFood(position: Int) {
+    fun updateFood(newFood: Food,position: Int) {
+        foods[position] = newFood
         notifyItemChanged(position)
     }
 

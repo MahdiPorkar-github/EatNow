@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
         foodDao = FoodDatabase.getDatabase(this).foodDao
 
-        val sharedPreferences = getSharedPreferences("eatNow",Context.MODE_PRIVATE)
-        if (sharedPreferences.getBoolean("firstRun",true)) {
+        val sharedPreferences = getSharedPreferences("eatNow", Context.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("firstRun", true)) {
             firstRun()
-            sharedPreferences.edit().putBoolean("firstRun",false).apply()
+            sharedPreferences.edit().putBoolean("firstRun", false).apply()
         }
 
         showAllData()
@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
 
     }
+
     private fun firstRun() {
         foodDao.insertAllFoods(FoodGenerator.getFoods())
     }
@@ -154,17 +155,22 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
 
             if (txtName.isNotEmpty() && txtCity.isNotEmpty() && txtPrice.isNotEmpty() && txtDistance.isNotEmpty()) {
-                food.txtSubject = dialogBinding.dialogueEdtFoodName.text.toString()
-                food.txtPrice = dialogBinding.dialogueEdtFoodPrice.text.toString()
-                food.txtDistance = dialogBinding.dialogueEdtFoodDistance.text.toString()
-                food.txtCity = dialogBinding.dialogueEdtFoodCity.text.toString()
-                foodAdapter.updateFood(position)
+                val newFood = Food(
+                    id = food.id,
+                    txtSubject = txtName,
+                    txtPrice = txtPrice,
+                    txtDistance = txtDistance,
+                    txtCity = txtCity,
+                    urlImage = food.urlImage,
+                    ratersCount = food.ratersCount,
+                    rating = food.rating
+                )
+                foodAdapter.updateFood(newFood, position)
+                foodDao.updateFood(newFood)
                 dialog.dismiss()
             } else {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
-
             }
-
 
         }
     }
