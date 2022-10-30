@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
                         rating = rating
                     )
                 foodAdapter.addFood(newFood)
-                foodDao.insertFood(newFood)
+                foodDao.insertOrUpdate(newFood)
                 binding.recyclerMain.scrollToPosition(0)
                 dialogue.dismiss()
 
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
                     rating = food.rating
                 )
                 foodAdapter.updateFood(newFood, position)
-                foodDao.updateFood(newFood)
+                foodDao.insertOrUpdate(newFood)
                 dialog.dismiss()
             } else {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
