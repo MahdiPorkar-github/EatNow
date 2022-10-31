@@ -3,6 +3,7 @@ package com.example.eatnow
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
@@ -48,12 +49,14 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
             removeAllData()
         }
 
-        binding.edtSearchFood.addTextChangedListener { text ->
+        binding.edtSearchFood.addTextChangedListener { editTextInput ->
 
-            if (text.toString().isNotEmpty()) {
+            searchOnDatabase(editTextInput.toString())
+
+            if (editTextInput.toString().isNotEmpty()) {
 
                 val filteredList = FoodGenerator.getFoods().filter { food ->
-                    food.txtSubject.contains(text.toString())
+                    food.txtSubject.contains(editTextInput.toString())
                 }
 
                 foodAdapter.setData(filteredList as ArrayList<Food>)
@@ -66,6 +69,19 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         }
 
 
+    }
+
+    private fun searchOnDatabase(editTextInput: String) {
+
+        if (editTextInput.isNotEmpty()) {
+
+            val filteredList = foodDao.searchFood(editTextInput)
+            foodAdapter.setData(filteredList as ArrayList<Food>)
+
+        } else {
+            val foodData = foodDao.getAllFoods()
+            foodAdapter.setData(ArrayList(foodData))
+        }
     }
 
     private fun removeAllData() {
