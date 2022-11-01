@@ -21,7 +21,7 @@ const val BASE_URL_IMAGE = "https://dunijet.ir/YaghootAndroidFiles/DuniFoodSimpl
 
 class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var foodAdapter: FoodAdapter
     private lateinit var foodDao: FoodDao
 
@@ -50,24 +50,8 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         }
 
         binding.edtSearchFood.addTextChangedListener { editTextInput ->
-
             searchOnDatabase(editTextInput.toString())
-
-            if (editTextInput.toString().isNotEmpty()) {
-
-                val filteredList = FoodGenerator.getFoods().filter { food ->
-                    food.txtSubject.contains(editTextInput.toString())
-                }
-
-                foodAdapter.setData(filteredList as ArrayList<Food>)
-
-            } else {
-                foodAdapter.setData(FoodGenerator.getFoods())
-                // show all data
-            }
-
         }
-
 
     }
 
@@ -76,7 +60,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         if (editTextInput.isNotEmpty()) {
 
             val filteredList = foodDao.searchFood(editTextInput)
-            foodAdapter.setData(filteredList as ArrayList<Food>)
+            foodAdapter.setData(ArrayList(filteredList))
 
         } else {
             val foodData = foodDao.getAllFoods()
