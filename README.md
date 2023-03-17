@@ -19,5 +19,5 @@ The purpose of this repository is to demonstrate below:
 </p>
 
 ## 💻 Concepts used in the project
-MVP Architedture, Room ORM, Kotlin Coroutines, Glide, RecyclerView,...
+MVP Architedture, Room ORM, Kotlin Coroutines, Glide, ...
 
