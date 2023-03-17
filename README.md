@@ -6,7 +6,7 @@ The purpose of this repository is to demonstrate below:
 
 - How to use MVP to structure your app code.
 - Implementing repository pattern with MVP.
-- Performing room queries with Kotlin Coroutines.
+- Using Coroutines With Room
 - How to support both night,light themes on Android.
 
 ## 📷 Previews
