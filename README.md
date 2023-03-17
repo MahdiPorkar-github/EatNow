@@ -1,24 +1,23 @@
-# EatNow
-Food ordering menu app using room library for storing data with add/delete/updata ability 
+# EatNow!
 
+**EatNow!** demonstrates MVP Architecture on Android with Room.
 
+The purpose of this repository is to demonstrate below:
 
+- How to use MVP to structure your app code.
+- Implementing repository pattern with MVP.
+- Performing room queries with Kotlin Coroutines.
+- How to support both night,light themes on Android.
 
-![main](https://user-images.githubusercontent.com/88928420/218799996-95b1eaa8-d0b8-428c-aba7-52979ce0499c.png)
+## 📷 Previews
+<p align="center">
+<img src="previews/Home.png" alt="drawing" width="270px" />
+<img src="previews/Search.png" alt="drawing" width="270px" />
+<img src="previews/add.png" alt="drawing" width="269px" /></br>
+<img src="previews/delete.png" alt="drawing" width="269px" /></br>
 
+</p>
 
+## 💻 Concepts used in the project
+MVP Architedture, Room ORM, Kotlin Coroutines, Glide, RecyclerView,...
 
-
-
-![main_search](https://user-images.githubusercontent.com/88928420/218800021-b3020a5a-73fc-4c2e-b016-51ba65313c7f.png)
-
-
-
-
-
-![add_food](https://user-images.githubusercontent.com/88928420/218800038-29bfade4-3402-459e-ae66-fbc55bec57ee.png)
-
-
-
-
-![delete](https://user-images.githubusercontent.com/88928420/218800166-f103e3c7-528b-4e32-ad73-21ea64eca29e.png)
