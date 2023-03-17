@@ -1,4 +1,4 @@
-package com.example.eatnow.room
+package com.example.eatnow.model.room
 
 import android.content.Context
 import androidx.room.Database

@@ -1,42 +1,43 @@
-package com.example.eatnow
+package com.example.eatnow.mainScreen
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eatnow.databinding.*
-import com.example.eatnow.room.Food
-import com.example.eatnow.room.FoodDao
-import com.example.eatnow.room.FoodDatabase
+import com.example.eatnow.model.room.Food
+import com.example.eatnow.model.room.FoodDao
+import com.example.eatnow.model.room.FoodDatabase
+import com.example.eatnow.utils.showToast
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-const val BASE_URL_IMAGE = "https://dunijet.ir/YaghootAndroidFiles/DuniFoodSimple/food"
-
-class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
+class MainScreenActivity : AppCompatActivity(), FoodAdapter.FoodEvents, MainScreenContract.View {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var foodAdapter: FoodAdapter
     private lateinit var foodDao: FoodDao
-
+    private lateinit var mainScreenPresenter: MainScreenContract.Presenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mainScreenPresenter = MainScreenPresenter(FoodDatabase.getDatabase(this).foodDao)
+        mainScreenPresenter.onAttach(this)
 
         foodDao = FoodDatabase.getDatabase(this).foodDao
 
         val sharedPreferences = getSharedPreferences("eatNow", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("firstRun", true)) {
-            firstRun()
+            mainScreenPresenter.firstRun()
             sharedPreferences.edit().putBoolean("firstRun", false).apply()
         }
+
+        mainScreenPresenter.onAttach(this)
 
         showAllData()
 
@@ -46,32 +47,20 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         }
 
         binding.imgRemoveAll.setOnClickListener {
-            removeAllData()
+            mainScreenPresenter.onDeleteAllClicked()
         }
 
         binding.edtSearchFood.addTextChangedListener { editTextInput ->
-            searchOnDatabase(editTextInput.toString())
+            mainScreenPresenter.onSearchFood(editTextInput.toString())
         }
 
     }
 
-    private fun searchOnDatabase(editTextInput: String) {
-
-        if (editTextInput.isNotEmpty()) {
-
-            val filteredList = foodDao.searchFood(editTextInput)
-            foodAdapter.setData(ArrayList(filteredList))
-
-        } else {
-            val foodData = foodDao.getAllFoods()
-            foodAdapter.setData(ArrayList(foodData))
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        mainScreenPresenter.onDetach()
     }
 
-    private fun removeAllData() {
-        foodDao.deleteAllFoods()
-        showAllData()
-    }
 
     private fun showAllData() {
 
@@ -83,9 +72,6 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
     }
 
-    private fun firstRun() {
-        foodDao.insertAllFoods(FoodGenerator.getFoods())
-    }
 
     private fun addNewFood() {
 
@@ -104,9 +90,8 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
             val txtRatersCount = (1..150).random()
             val rating = 0f + Random().nextFloat() * (5f) // generates a float in range of 1-5
 
-
-            val randomForUrl = (1..12).random()
-            val urlPic = "$BASE_URL_IMAGE$randomForUrl.jpg"
+            val randomForUrl = (0..8).random()
+            val urlPic = foodDao.getAllFoods()[randomForUrl].drawable
 
 
             if (txtName.isNotEmpty() && txtCity.isNotEmpty() && txtPrice.isNotEmpty() && txtDistance.isNotEmpty()) {
@@ -116,17 +101,15 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
                         txtPrice = txtPrice,
                         txtDistance = txtDistance,
                         txtCity = txtCity,
-                        urlImage = urlPic,
+                        drawable = urlPic,
                         ratersCount = txtRatersCount,
                         rating = rating
                     )
-                foodAdapter.addFood(newFood)
-                foodDao.insertOrUpdate(newFood)
-                binding.recyclerMain.scrollToPosition(0)
+                mainScreenPresenter.onAddNewFoodClicked(newFood)
                 dialogue.dismiss()
 
             } else {
-                Toast.makeText(this, "Complete all the information", Toast.LENGTH_SHORT).show()
+                showToast("Complete all fields  ")
             }
         }
 
@@ -146,6 +129,7 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
         dialogBinding.dialogueEdtFoodPrice.setText(food.txtPrice)
 
         dialogBinding.dialogBtnUpdateCancel.setOnClickListener { dialog.dismiss() }
+
         dialogBinding.dialogBtnUpdateSure.setOnClickListener {
 
             val txtName = dialogBinding.dialogueEdtFoodName.text.toString()
@@ -161,15 +145,14 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
                     txtPrice = txtPrice,
                     txtDistance = txtDistance,
                     txtCity = txtCity,
-                    urlImage = food.urlImage,
+                    drawable = food.drawable,
                     ratersCount = food.ratersCount,
                     rating = food.rating
                 )
-                foodAdapter.updateFood(newFood, position)
-                foodDao.insertOrUpdate(newFood)
+                mainScreenPresenter.onUpdateFood(newFood, position)
                 dialog.dismiss()
             } else {
-                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+                showToast("Please fill all the fields")
             }
 
         }
@@ -189,9 +172,30 @@ class MainActivity : AppCompatActivity(), FoodAdapter.FoodEvents {
 
         dialogBinding.dialogBtnDeleteSure.setOnClickListener {
 
+            mainScreenPresenter.onDeleteFood(food, position)
             dialog.dismiss()
-            foodAdapter.removeFood(food, position)
-            foodDao.deleteFood(food)
         }
+    }
+
+    override fun showFoods(data: List<Food>) {
+        foodAdapter = FoodAdapter(ArrayList(data), this)
+        binding.recyclerMain.adapter = foodAdapter
+        binding.recyclerMain.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    }
+
+    override fun showRefreshedFoods(data: List<Food>) {
+        foodAdapter.setData(ArrayList(data))
+    }
+
+    override fun showNewFoodAdded(newFood: Food) {
+        foodAdapter.addFood(newFood)
+    }
+
+    override fun showDeletedFoodList(oldFood: Food, position: Int) {
+        foodAdapter.removeFood(oldFood, position)
+    }
+
+    override fun showUpdatedFood(editingFood: Food, position: Int) {
+        foodAdapter.updateFood(editingFood, position)
     }
 }

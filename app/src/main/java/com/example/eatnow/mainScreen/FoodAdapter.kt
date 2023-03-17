@@ -1,11 +1,11 @@
-package com.example.eatnow
+package com.example.eatnow.mainScreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.eatnow.databinding.RowRecyclerFoodBinding
-import com.example.eatnow.room.Food
+import com.example.eatnow.model.room.Food
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 class FoodAdapter(private val foods: ArrayList<Food>, private val foodEvents: FoodEvents) :
@@ -26,7 +26,7 @@ class FoodAdapter(private val foods: ArrayList<Food>, private val foodEvents: Fo
             binding.rowFoodRatingBar.rating = food.rating
             binding.rowFoodRatersCount.text = "( ${food.ratersCount} Ratings)"
 
-            Glide.with(binding.root.context).load(food.urlImage)
+            Glide.with(binding.root.context).load(food.drawable)
                 .transform(RoundedCornersTransformation(16, 4)).into(binding.rowImgMain)
 
             binding.root.setOnClickListener {
@@ -68,7 +68,7 @@ class FoodAdapter(private val foods: ArrayList<Food>, private val foodEvents: Fo
     }
 
 
-    fun updateFood(newFood: Food,position: Int) {
+    fun updateFood(newFood: Food, position: Int) {
         foods[position] = newFood
         notifyItemChanged(position)
     }
